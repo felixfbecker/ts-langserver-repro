@@ -33,6 +33,7 @@ async function main() {
         const rootUri = pathToFileURL(rootPath).href
         const initParams: InitializeParams = {
             processId: 0,
+            rootPath,
             rootUri,
             workspaceFolders: [{ name: '', uri: rootUri }],
             capabilities: {},
