@@ -6,8 +6,11 @@ import {
     HoverRequest,
     TextDocumentPositionParams,
     InitializeParams,
+    DidOpenTextDocumentNotification,
+    DidOpenTextDocumentParams,
 } from 'vscode-languageserver-protocol'
 import { pathToFileURL } from 'url'
+import * as fs from 'mz/fs'
 
 async function main() {
     const toDispose: Disposable[] = []
@@ -38,19 +41,36 @@ async function main() {
             workspaceFolders: [{ name: '', uri: rootUri }],
             capabilities: {},
         }
+        console.log('sending initialize request with params', initParams)
         const initResult = await messageConnection.sendRequest(InitializeRequest.type, initParams)
         console.log('initialize result', initResult)
+
+        const testPath = path.resolve(rootPath, 'src', 'test.ts')
+        const testUri = pathToFileURL(testPath).href
+
+        // Send textDocument/didOpen
+        const didOpenParams: DidOpenTextDocumentParams = {
+            textDocument: {
+                uri: testUri,
+                text: await fs.readFile(testPath, 'utf8'),
+                languageId: 'typescript',
+                version: 1,
+            },
+        }
+        console.log('sending didOpen notification with params', didOpenParams)
+        await messageConnection.sendNotification(DidOpenTextDocumentNotification.type, didOpenParams)
 
         // Send hover request
         const hoverParams: TextDocumentPositionParams = {
             textDocument: {
-                uri: pathToFileURL(path.resolve(rootPath, 'src', 'test.ts')).href,
+                uri: testUri,
             },
             position: {
                 line: 3,
                 character: 11,
             },
         }
+        console.log('sending hover request with params', hoverParams)
         const hover = await messageConnection.sendRequest(HoverRequest.type, hoverParams)
         console.log('hover result', hover)
     } finally {
