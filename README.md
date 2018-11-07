@@ -1,6 +1,6 @@
 Reproduces issue https://github.com/theia-ide/typescript-language-server/issues/89
 
-Run
+With Node 11 installed, run
 
 ```sh
 npm install
