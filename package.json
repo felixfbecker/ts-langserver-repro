@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p .",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "typescript": "^3.1.6",
+    "typescript-language-server": "^0.3.6",
+    "vscode-languageserver-protocol": "^3.13.0",
+    "vscode-languageserver-types": "^3.13.0",
+    "vscode-ws-jsonrpc": "^0.0.3"
+  },
+  "devDependencies": {
+    "@sourcegraph/prettierrc": "^2.2.0",
+    "@types/node": "^10.12.2",
+    "prettier": "^1.15.1"
+  }
+}
